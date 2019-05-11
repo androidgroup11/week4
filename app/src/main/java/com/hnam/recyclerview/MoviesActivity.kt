@@ -1,37 +1,56 @@
 package com.hnam.recyclerview
 
-import android.content.Context
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewParent
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.movie_list.view.*
+@SuppressLint("SetTextI18n")
 
 class MoviesActivity : AppCompatActivity() {
-    var movie: ArrayList<Movie.Results> = ArrayList()
-    lateinit var movieAdapter :MovieAdapter
-    var model = Movie()
+
+    var movies: ArrayList<MovieModel.Results> = ArrayList()
+
+    lateinit var movieAdapter: MovieAdapter
+    val model = MovieModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        addMovies()
-        movie_list.layoutManager = LinearLayoutManager(this)
-        movieAdapter = MovieAdapter(movie,this)
-        movie_list.adapter = movieAdapter
-        movieAdapter.setListenner(movieItemClickListener)
 
+        addMovies()
+
+        // setup layout manager and recyclerview
+        movie_list.layoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager?
+
+        movieAdapter = MovieAdapter(movies, this)
+
+        movie_list.adapter = movieAdapter
+
+
+
+        movieAdapter.setListener(movieItemClickListenner)
     }
 
-    private fun addMovies(){
-        for(i in model.getMovieModel().results){
-            movie.add(i)
-            Log.i("film array", movie.toString())
+    private val movieItemClickListenner = object: MovieItemClickListenner {
+        override fun onItemCLicked(position: Int) {
+
+            val intent = Intent(this@MoviesActivity,ProfileActivity::class.java)
+            intent.putExtra(MOVIE_TITILE_KEY, movies[position].title)
+            intent.putExtra(MOVIE_CONTENT_KEY, movies[position].video)
+            intent.putExtra(MOVIE_POSTER_PATH_KEY, movies[position].overview)
+            intent.putExtra(MOVIE_VOTE_KEY, movies[position].poster_path)
+            intent.putExtra(MOVIE_VIDEO_KEY, movies[position].vote_average)
+            startActivity(intent)
+
         }
+    }
+    private fun addMovies() {
+        for (i in model.getMovieModel().results) {
+            movies.add(i)
+            Log.i("film array", movies.toString())
+        }
+    }
 }

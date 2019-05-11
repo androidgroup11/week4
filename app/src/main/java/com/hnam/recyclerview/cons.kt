@@ -1,0 +1,7 @@
+package com.hnam.recyclerview
+
+const val MOVIE_TITILE_KEY = "MOVIE_TITILE_KEY"
+const val MOVIE_CONTENT_KEY = "MOVIE_CONTENT_KEY"
+const val MOVIE_POSTER_PATH_KEY = "MOVIE_POSTER_PATH_KEY"
+const val MOVIE_VOTE_KEY = "MOVIE_VOTE_KEY"
+const val MOVIE_VIDEO_KEY = "MOVIE_VIDEO_KEY"

@@ -2,8 +2,7 @@ package com.hnam.recyclerview
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-
-class Movie {
+class MovieModel(){
     data class ResultArray (
         val results : List<Results>
     )

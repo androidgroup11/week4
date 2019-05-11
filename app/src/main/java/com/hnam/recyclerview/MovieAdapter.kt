@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.movie_list.view.*
+import kotlinx.android.synthetic.main.item_movie.view.*
 
-class MovieAdapter(val items: ArrayList<Movie>, val context: Context): RecyclerView.Adapter<MovieViewHolder>(){
+class MovieAdapter (var items: ArrayList<MovieModel.Results>, val context: Context) : RecyclerView.Adapter<MovieViewHolder>(){
+    lateinit var mListener: MovieItemClickListenner
+
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): MovieViewHolder {
-        return MovieViewHolder(LayoutInflater.from(context).inflate(R.layout.movie_list,parent,false))
+        return MovieViewHolder(LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -23,36 +25,36 @@ class MovieAdapter(val items: ArrayList<Movie>, val context: Context): RecyclerV
         movieViewHolder.tvLanguage.text = "Original language: "+items.get(position).original_language
         movieViewHolder.tvPopularity.text = "Popularity: "+items.get(position).popularity
         movieViewHolder.tvVote.text = "Vote count: "+items.get(position).vote_count
-        var value_video: Boolean = items.get(position).video
-        if(value_video ==true){
-            movieViewHolder.tvPlay.visibility = View.VISIBLE
-        }
-        else
-        {
-            movieViewHolder.tvPlay.visibility = View.INVISIBLE
-        }
-
         Glide.with(context)
             .load("https://image.tmdb.org/t/p/w500/"+items.get(position).poster_path)
             .centerCrop()
             .placeholder(R.drawable.student)
             .into(movieViewHolder.tvAvatar)
-        movieViewHolder.itemView.setOnClickListener{
-            mListener.onItemClicked(position)
+
+
+        movieViewHolder.itemView.setOnClickListener {
+            mListener.onItemCLicked(position)
         }
-    }
-    fun setListenner(listener: FilmItemClickListener){
-        this.mListener = listener
-    }
-    }
-    class MovieViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        var tvAvatar = view.ivAvatar
-        var tvName = view.NameFilm
-        var tvPlay = view.play
-        var tvReleaseDate = view.Release
-        var tvLanguage = view.language
-        var tvPopularity = view.popularity
-        var tvVote = view.vote_count
 
     }
+
+    fun setListener(listener: MovieItemClickListenner) {
+        this.mListener = listener
+    }
+
+    fun setData(items: ArrayList<MovieModel.Results>){
+        this.items = items
+        notifyDataSetChanged()
+    }
+
+}
+
+class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    var tvAvatar = view.ivAvatar
+    var tvName = view.NameFilm
+    var tvPlay = view.play
+    var tvReleaseDate = view.Release
+    var tvLanguage = view.language
+    var tvPopularity = view.popularity
+    var tvVote = view.vote_count
 }
